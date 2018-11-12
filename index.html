@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="Journey Planner"/>
+        <meta name="author" content="Kevin Susanto" />
+
+        <title>Journey Planner</title>
+
+        <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="node_modules/leaflet/dist/leaflet.css" rel="stylesheet"/>
+        <link href="node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet"/>
+        <link href="node_modules/typeahead.js-bootstrap4-css/typeaheadjs.css" rel="stylesheet"/>
+    </head>
+
+    <body class="bg-light">
+
+    <div class="container">
+        <div class="py-5 text-center">
+            <h2>Journey Planner</h2>
+        </div>
+        
+        <form>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="from">From</label>
+                    <div id="from-wrapper">
+                        <input type="text" class="form-control typeahead" id="from" placeholder="From" required />
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="to">To</label>
+                    <div id="to-wrapper">
+                        <input type="text" class="form-control typeahead" id="to" placeholder="To" required />
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label for="mode">Mode</label>
+                    <select id="mode" class="form-control">
+                        <option value="TRANSIT">Bus / MRT</option>
+                        <option value="RAIL">MRT</option>
+                        <option value="BUS">Bus</option>
+                    </select>
+                </div>
+            </div>
+            <input type="hidden" id="fromLat" />
+            <input type="hidden" id="fromLon" />
+            <input type="hidden" id="toLat" />
+            <input type="hidden" id="toLon" />
+            <input type="hidden" id="planResult" />
+            <button type="button" class="btn btn-primary" onclick="planJourney()">Plan</button>
+            <button type="button" class="btn btn-secondary" onclick="location.reload();">Reset</button>
+        </form>
+        
+        <div class="row mt-3">
+			<div class="col-md-3">
+				<h4>Route Options</h4>
+				<span id="options"></span>
+			</div>
+			<div class="col-md-3">
+				<h4>Journey Details</h4>
+				<span id="details"></span>
+			</div>
+			<div class="col-md-6">
+				<div id="mapdiv" style="height:500px;"></div>
+			</div>
+		</div>
+    
+    </div>
+    
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="node_modules/leaflet/dist/leaflet.js"></script>
+    <script src="node_modules/typeahead.js/dist/typeahead.bundle.min.js"></script>
+    <script src="node_modules/moment/moment.js"></script>
+    <script src="node_modules/humanize-duration/humanize-duration.js"></script>
+    <script src="node_modules/polyline-encoded/Polyline.encoded.js"></script>
+    
+    <script src="js/app.js"></script>
+  </body>
+</html>
