@@ -103,15 +103,30 @@ function planJourney() {
     $('#options').html('<i class="fas fa-spinner fa-spin"></i> loading...');
     $('#details').html('<i class="fas fa-spinner fa-spin"></i> loading...');
     
-    $.when(getToken()).done(function(data) {
-        var token = JSON.parse(data).access_token;
-        var url = 'https://developers.onemap.sg/privateapi/routingsvc/route?start='+fromLat+','+fromLon+'&end='+toLat+','+toLon+'&date='+moment().format('YYYY-MM-DD')+'&time='+moment().format('HHmmss')+'&mode=' + mode + '&routeType=pt&token='+token;
-        
-        $.get(url, function(data) {
-            $('#planResult').val(JSON.stringify(data));
-            parseResult(data);
-        });
-    });
+	if (Cookies.get('token') && moment.unix(Cookies.get('token_expiry')).isAfter(moment())) {
+		// Use token from cookie if still valid
+		var token = Cookies.get('token');
+		var url = 'https://developers.onemap.sg/privateapi/routingsvc/route?start='+fromLat+','+fromLon+'&end='+toLat+','+toLon+'&date='+moment().format('YYYY-MM-DD')+'&time='+moment().format('HHmmss')+'&mode=' + mode + '&routeType=pt&token='+token;
+			
+		$.get(url, function(data) {
+			$('#planResult').val(JSON.stringify(data));
+			parseResult(data);
+		});
+	} else {
+		// Do authentication
+		$.when(getToken()).done(function(data) {
+			var token = JSON.parse(data).access_token;
+			var url = 'https://developers.onemap.sg/privateapi/routingsvc/route?start='+fromLat+','+fromLon+'&end='+toLat+','+toLon+'&date='+moment().format('YYYY-MM-DD')+'&time='+moment().format('HHmmss')+'&mode=' + mode + '&routeType=pt&token='+token;
+			
+			Cookies.set('token', JSON.parse(data).access_token);
+			Cookies.set('token_expiry', JSON.parse(data).expiry_timestamp);
+			
+			$.get(url, function(data) {
+				$('#planResult').val(JSON.stringify(data));
+				parseResult(data);
+			});
+		});
+	}
 }
 
 function parseResult(data, optionShown = 0) {
